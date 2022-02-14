@@ -18,14 +18,17 @@ public enum UIViewLayout: Equatable {
     
     func systemLayoutSize(for view: UIView) -> CGSize? {
         view.layoutIfNeeded()
+        let size: CGSize
         switch self {
         case .sizeThatFits:
-            return view.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+            size = view.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         case .fixed(let width, let height):
-            return view.systemLayoutSizeFitting(CGSize(width: width, height: height),
+            size = view.systemLayoutSizeFitting(CGSize(width: width, height: height),
                                                 withHorizontalFittingPriority: width == 0 ? .defaultLow : .required,
                                                 verticalFittingPriority: height == 0 ? .defaultLow : .required)
+            
         }
+        return size != .zero ? size : view.intrinsicContentSize
     }
 }
 
